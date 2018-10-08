@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
+import { Link } from "react-router";
 
 class SongList extends React.Component {
   constructor(props) {
@@ -31,6 +32,7 @@ class SongList extends React.Component {
       <div>
         <h2>Song List </h2>
         {this.renderSongs()}
+        <Link to="/create"> Create A Song</Link>
       </div>
     );
   }
