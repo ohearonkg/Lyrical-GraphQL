@@ -8,28 +8,34 @@ class SongList extends Component {
   constructor(props) {
     super(props);
     this.renderSongs = this.renderSongs.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+  }
+
+  handleDelete(id) {
+    const {
+      data: { refetch },
+      mutate
+    } = this.props;
+    mutate({
+      variables: {
+        id
+      }
+    }).then(() => refetch());
   }
 
   renderSongs() {
     const {
-      data: { songs, refetch },
-      mutate
+      data: { songs }
     } = this.props;
 
     return (
       <ul className="collection">
         {songs.map(song => (
           <li className="collection-item" key={song.id}>
-            {song.title}
+            <Link to={`songs/${song.id}`}>{song.title}</Link>
             <i
               className="material-icons"
-              onClick={() =>
-                mutate({
-                  variables: {
-                    id: song.id
-                  }
-                }).then(() => refetch())
-              }
+              onClick={() => this.handleDelete(song.id)}
             >
               delete
             </i>
