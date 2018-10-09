@@ -9,11 +9,19 @@ class LyricList extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(lyricId) {
+  handleClick(lyricId, numberLikes) {
     const { mutate } = this.props;
     mutate({
       variables: {
         lyricId
+      },
+      optimisticReponse: {
+        __typename: "Mutation",
+        likeLyric: {
+          id: lyricId,
+          __typename: "LyricType",
+          likes: numberLikes + 1
+        }
       }
     });
   }
@@ -28,7 +36,7 @@ class LyricList extends Component {
             <div>
               <h4>{lyric.likes}</h4>
               <i
-                onClick={() => this.handleClick(lyric.id)}
+                onClick={() => this.handleClick(lyric.id, lyric.likes)}
                 className="material-icons"
               >
                 thumb_up
