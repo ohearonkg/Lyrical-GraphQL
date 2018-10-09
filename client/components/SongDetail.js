@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import { Link } from "react-router";
+import LyricCreate from "./LyricCreate";
+import fetchSong from "../queries/fetchSong";
+import LyricList from "./LyricList";
 
 class SongDetail extends Component {
   constructor(props) {
@@ -12,19 +14,23 @@ class SongDetail extends Component {
   renderSongDetails() {
     const {
       data: {
-        song: { title }
-      }
+        song: { title, lyrics }
+      },
+      params: { id }
     } = this.props;
+
     return (
-      <div className="collection-item">
+      <div>
         <h2> {title} </h2>
+        <LyricList lyrics={lyrics} />
+        <LyricCreate songId={id} />
       </div>
     );
   }
 
   render() {
     const {
-      data: { loading, songs }
+      data: { loading }
     } = this.props;
 
     return (
@@ -36,18 +42,7 @@ class SongDetail extends Component {
   }
 }
 
-const query = gql`
-  query song($id: ID!) {
-    song(id: $id) {
-      title
-      lyrics {
-        likes
-      }
-    }
-  }
-`;
-
-export default graphql(query, {
+export default graphql(fetchSong, {
   options: props => {
     return {
       variables: {
